@@ -8,9 +8,77 @@
     <title>Document</title>
     <link rel="stylesheet" href="./css/iconfont.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #0f0f1e;
+        }
+
+        ul,
+        li,
+        ol {
+            list-style: none;
+        }
+
+        .main {
+            width: 1005px;
+            margin: 150px auto;
+            display: flex;
+        }
+
+        .main>.video-list {
+            background-color: #2329315c;
+            width: 205px;
+        }
+
+        .main>.video-list>ul {
+            padding-top: 10px;
+        }
+
+        .main>.video-list>ul>li {
+            float: left;
+            margin: 5px;
+        }
+
+        .main>.video-list>ul>li>a {
+            background-color: #607d8b47;
+            /* margin: 3px 8px; */
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 5px;
+            color: #eee;
+            text-decoration: none;
+        }
+
+        .main>.video-list>ul>li>a:hover {
+            color: #fdf751;
+        }
+
+        .main>.video-list>.title {
+            color: #fdf751;
+            position: relative;
+            border-bottom: 1px solid #434145;
+            box-sizing: border-box;
+            padding: 0px 12px;
+            height: 40px;
+            line-height: 40px
+        }
+
+        .main>.video-list>.title>span.line {
+            width: 50px;
+            height: 4px;
+            background-color: #fdf751;
+            position: absolute;
+            bottom: -2px;
+            left: 19px;
+        }
+
+
         .player-wrap {
             width: 800px;
-            margin: 50px auto;
+            /* margin: 50px auto; */
             position: relative;
         }
 
@@ -73,8 +141,9 @@
             right: -18px;
             cursor: pointer;
         }
+
         /* 鼠标移出时隐藏进度条小电视机 */
-        .player-control-mask>.progress-top>.progress-current>.progress-circle.hidden{
+        .player-control-mask>.progress-top>.progress-current>.progress-circle.hidden {
             display: none;
         }
 
@@ -86,8 +155,9 @@
             justify-content: space-between;
             font-size: 12px;
         }
+
         /* 鼠标移出时隐藏控制按钮 */
-        .player-control.hidden{
+        .player-control.hidden {
             display: none;
         }
 
@@ -128,114 +198,127 @@
 </head>
 
 <body>
-    <div class="player-wrap">
-        <video src="./video/0001-0250.mkv"></video>
-        <div class="player-control-mask-wrap">
-            <div class="player-control-mask">
-                <div class="progress-top">
-                    <div class="progress-all"></div>
-                    <div class="progress-current">
-                        <div class="progress-circle">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" width="18" height="18"
-                                preserveAspectRatio="xMidYMid meet"
-                                style="width: 100%; height: 100%; transform: translate3d(0px, 0px, 0px);">
-                                <defs>
-                                    <clipPath id="__lottie_element_1403">
-                                        <rect width="18" height="18" x="0" y="0"></rect>
-                                    </clipPath>
-                                </defs>
-                                <g clip-path="url(#__lottie_element_1403)">
-                                    <g transform="matrix(0.9883429408073425,-0.7275781631469727,0.6775955557823181,0.920446515083313,7.3224687576293945,-0.7606706619262695)"
-                                        opacity="1" style="display: block;">
-                                        <g opacity="1"
-                                            transform="matrix(0.9937776327133179,-0.11138220876455307,0.11138220876455307,0.9937776327133179,-2.5239999294281006,1.3849999904632568)">
-                                            <path fill="rgb(51,51,51)" fill-opacity="1"
-                                                d=" M0.75,-1.25 C0.75,-1.25 0.75,1.25 0.75,1.25 C0.75,1.663925051689148 0.4139249920845032,2 0,2 C0,2 0,2 0,2 C-0.4139249920845032,2 -0.75,1.663925051689148 -0.75,1.25 C-0.75,1.25 -0.75,-1.25 -0.75,-1.25 C-0.75,-1.663925051689148 -0.4139249920845032,-2 0,-2 C0,-2 0,-2 0,-2 C0.4139249920845032,-2 0.75,-1.663925051689148 0.75,-1.25z">
-                                            </path>
+    <div class="main">
+        <div class="player-wrap">
+            <video src="./video/0001-0250.mkv"></video>
+            <div class="player-control-mask-wrap">
+                <div class="player-control-mask">
+                    <div class="progress-top">
+                        <div class="progress-all"></div>
+                        <div class="progress-current">
+                            <div class="progress-circle">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" width="18" height="18"
+                                    preserveAspectRatio="xMidYMid meet"
+                                    style="width: 100%; height: 100%; transform: translate3d(0px, 0px, 0px);">
+                                    <defs>
+                                        <clipPath id="__lottie_element_1403">
+                                            <rect width="18" height="18" x="0" y="0"></rect>
+                                        </clipPath>
+                                    </defs>
+                                    <g clip-path="url(#__lottie_element_1403)">
+                                        <g transform="matrix(0.9883429408073425,-0.7275781631469727,0.6775955557823181,0.920446515083313,7.3224687576293945,-0.7606706619262695)"
+                                            opacity="1" style="display: block;">
+                                            <g opacity="1"
+                                                transform="matrix(0.9937776327133179,-0.11138220876455307,0.11138220876455307,0.9937776327133179,-2.5239999294281006,1.3849999904632568)">
+                                                <path fill="rgb(51,51,51)" fill-opacity="1"
+                                                    d=" M0.75,-1.25 C0.75,-1.25 0.75,1.25 0.75,1.25 C0.75,1.663925051689148 0.4139249920845032,2 0,2 C0,2 0,2 0,2 C-0.4139249920845032,2 -0.75,1.663925051689148 -0.75,1.25 C-0.75,1.25 -0.75,-1.25 -0.75,-1.25 C-0.75,-1.663925051689148 -0.4139249920845032,-2 0,-2 C0,-2 0,-2 0,-2 C0.4139249920845032,-2 0.75,-1.663925051689148 0.75,-1.25z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <g transform="matrix(1.1436611413955688,0.7535901665687561,-0.6317168474197388,0.9587040543556213,16.0070743560791,2.902894973754883)"
+                                            opacity="1" style="display: block;">
+                                            <g opacity="1"
+                                                transform="matrix(0.992861807346344,0.1192704513669014,-0.1192704513669014,0.992861807346344,-2.5239999294281006,1.3849999904632568)">
+                                                <path fill="rgb(51,51,51)" fill-opacity="1"
+                                                    d=" M0.75,-1.25 C0.75,-1.25 0.75,1.25 0.75,1.25 C0.75,1.663925051689148 0.4139249920845032,2 0,2 C0,2 0,2 0,2 C-0.4139249920845032,2 -0.75,1.663925051689148 -0.75,1.25 C-0.75,1.25 -0.75,-1.25 -0.75,-1.25 C-0.75,-1.663925051689148 -0.4139249920845032,-2 0,-2 C0,-2 0,-2 0,-2 C0.4139249920845032,-2 0.75,-1.663925051689148 0.75,-1.25z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <g transform="matrix(1,0,0,1,8.890999794006348,8.406000137329102)" opacity="1"
+                                            style="display: block;">
+                                            <g opacity="1"
+                                                transform="matrix(1,0,0,1,0.09099999815225601,1.1009999513626099)">
+                                                <path fill="rgb(255,255,255)" fill-opacity="1"
+                                                    d=" M7,-3 C7,-3 7,3 7,3 C7,4.379749774932861 5.879749774932861,5.5 4.5,5.5 C4.5,5.5 -4.5,5.5 -4.5,5.5 C-5.879749774932861,5.5 -7,4.379749774932861 -7,3 C-7,3 -7,-3 -7,-3 C-7,-4.379749774932861 -5.879749774932861,-5.5 -4.5,-5.5 C-4.5,-5.5 4.5,-5.5 4.5,-5.5 C5.879749774932861,-5.5 7,-4.379749774932861 7,-3z">
+                                                </path>
+                                                <path stroke-linecap="butt" stroke-linejoin="miter" fill-opacity="0"
+                                                    stroke-miterlimit="4" stroke="rgb(51,51,51)" stroke-opacity="1"
+                                                    stroke-width="1.5"
+                                                    d=" M7,-3 C7,-3 7,3 7,3 C7,4.379749774932861 5.879749774932861,5.5 4.5,5.5 C4.5,5.5 -4.5,5.5 -4.5,5.5 C-5.879749774932861,5.5 -7,4.379749774932861 -7,3 C-7,3 -7,-3 -7,-3 C-7,-4.379749774932861 -5.879749774932861,-5.5 -4.5,-5.5 C-4.5,-5.5 4.5,-5.5 4.5,-5.5 C5.879749774932861,-5.5 7,-4.379749774932861 7,-3z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <g transform="matrix(1,0,0,1,8.89900016784668,8.083999633789062)" opacity="1"
+                                            style="display: block;">
+                                            <g opacity="1"
+                                                transform="matrix(1,0,0,1,-2.5239999294281006,1.3849999904632568)">
+                                                <path fill="rgb(51,51,51)" fill-opacity="1"
+                                                    d=" M0.875,-1.125 C0.875,-1.125 0.875,1.125 0.875,1.125 C0.875,1.607912540435791 0.48291251063346863,2 0,2 C0,2 0,2 0,2 C-0.48291251063346863,2 -0.875,1.607912540435791 -0.875,1.125 C-0.875,1.125 -0.875,-1.125 -0.875,-1.125 C-0.875,-1.607912540435791 -0.48291251063346863,-2 0,-2 C0,-2 0,-2 0,-2 C0.48291251063346863,-2 0.875,-1.607912540435791 0.875,-1.125z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <g transform="matrix(1,0,0,1,14.008999824523926,8.083999633789062)" opacity="1"
+                                            style="display: block;">
+                                            <g opacity="1"
+                                                transform="matrix(1,0,0,1,-2.5239999294281006,1.3849999904632568)">
+                                                <path fill="rgb(51,51,51)" fill-opacity="1"
+                                                    d=" M0.8999999761581421,-1.100000023841858 C0.8999999761581421,-1.100000023841858 0.8999999761581421,1.100000023841858 0.8999999761581421,1.100000023841858 C0.8999999761581421,1.596709966659546 0.4967099726200104,2 0,2 C0,2 0,2 0,2 C-0.4967099726200104,2 -0.8999999761581421,1.596709966659546 -0.8999999761581421,1.100000023841858 C-0.8999999761581421,1.100000023841858 -0.8999999761581421,-1.100000023841858 -0.8999999761581421,-1.100000023841858 C-0.8999999761581421,-1.596709966659546 -0.4967099726200104,-2 0,-2 C0,-2 0,-2 0,-2 C0.4967099726200104,-2 0.8999999761581421,-1.596709966659546 0.8999999761581421,-1.100000023841858z">
+                                                </path>
+                                            </g>
                                         </g>
                                     </g>
-                                    <g transform="matrix(1.1436611413955688,0.7535901665687561,-0.6317168474197388,0.9587040543556213,16.0070743560791,2.902894973754883)"
-                                        opacity="1" style="display: block;">
-                                        <g opacity="1"
-                                            transform="matrix(0.992861807346344,0.1192704513669014,-0.1192704513669014,0.992861807346344,-2.5239999294281006,1.3849999904632568)">
-                                            <path fill="rgb(51,51,51)" fill-opacity="1"
-                                                d=" M0.75,-1.25 C0.75,-1.25 0.75,1.25 0.75,1.25 C0.75,1.663925051689148 0.4139249920845032,2 0,2 C0,2 0,2 0,2 C-0.4139249920845032,2 -0.75,1.663925051689148 -0.75,1.25 C-0.75,1.25 -0.75,-1.25 -0.75,-1.25 C-0.75,-1.663925051689148 -0.4139249920845032,-2 0,-2 C0,-2 0,-2 0,-2 C0.4139249920845032,-2 0.75,-1.663925051689148 0.75,-1.25z">
-                                            </path>
-                                        </g>
-                                    </g>
-                                    <g transform="matrix(1,0,0,1,8.890999794006348,8.406000137329102)" opacity="1"
-                                        style="display: block;">
-                                        <g opacity="1"
-                                            transform="matrix(1,0,0,1,0.09099999815225601,1.1009999513626099)">
-                                            <path fill="rgb(255,255,255)" fill-opacity="1"
-                                                d=" M7,-3 C7,-3 7,3 7,3 C7,4.379749774932861 5.879749774932861,5.5 4.5,5.5 C4.5,5.5 -4.5,5.5 -4.5,5.5 C-5.879749774932861,5.5 -7,4.379749774932861 -7,3 C-7,3 -7,-3 -7,-3 C-7,-4.379749774932861 -5.879749774932861,-5.5 -4.5,-5.5 C-4.5,-5.5 4.5,-5.5 4.5,-5.5 C5.879749774932861,-5.5 7,-4.379749774932861 7,-3z">
-                                            </path>
-                                            <path stroke-linecap="butt" stroke-linejoin="miter" fill-opacity="0"
-                                                stroke-miterlimit="4" stroke="rgb(51,51,51)" stroke-opacity="1"
-                                                stroke-width="1.5"
-                                                d=" M7,-3 C7,-3 7,3 7,3 C7,4.379749774932861 5.879749774932861,5.5 4.5,5.5 C4.5,5.5 -4.5,5.5 -4.5,5.5 C-5.879749774932861,5.5 -7,4.379749774932861 -7,3 C-7,3 -7,-3 -7,-3 C-7,-4.379749774932861 -5.879749774932861,-5.5 -4.5,-5.5 C-4.5,-5.5 4.5,-5.5 4.5,-5.5 C5.879749774932861,-5.5 7,-4.379749774932861 7,-3z">
-                                            </path>
-                                        </g>
-                                    </g>
-                                    <g transform="matrix(1,0,0,1,8.89900016784668,8.083999633789062)" opacity="1"
-                                        style="display: block;">
-                                        <g opacity="1"
-                                            transform="matrix(1,0,0,1,-2.5239999294281006,1.3849999904632568)">
-                                            <path fill="rgb(51,51,51)" fill-opacity="1"
-                                                d=" M0.875,-1.125 C0.875,-1.125 0.875,1.125 0.875,1.125 C0.875,1.607912540435791 0.48291251063346863,2 0,2 C0,2 0,2 0,2 C-0.48291251063346863,2 -0.875,1.607912540435791 -0.875,1.125 C-0.875,1.125 -0.875,-1.125 -0.875,-1.125 C-0.875,-1.607912540435791 -0.48291251063346863,-2 0,-2 C0,-2 0,-2 0,-2 C0.48291251063346863,-2 0.875,-1.607912540435791 0.875,-1.125z">
-                                            </path>
-                                        </g>
-                                    </g>
-                                    <g transform="matrix(1,0,0,1,14.008999824523926,8.083999633789062)" opacity="1"
-                                        style="display: block;">
-                                        <g opacity="1"
-                                            transform="matrix(1,0,0,1,-2.5239999294281006,1.3849999904632568)">
-                                            <path fill="rgb(51,51,51)" fill-opacity="1"
-                                                d=" M0.8999999761581421,-1.100000023841858 C0.8999999761581421,-1.100000023841858 0.8999999761581421,1.100000023841858 0.8999999761581421,1.100000023841858 C0.8999999761581421,1.596709966659546 0.4967099726200104,2 0,2 C0,2 0,2 0,2 C-0.4967099726200104,2 -0.8999999761581421,1.596709966659546 -0.8999999761581421,1.100000023841858 C-0.8999999761581421,1.100000023841858 -0.8999999761581421,-1.100000023841858 -0.8999999761581421,-1.100000023841858 C-0.8999999761581421,-1.596709966659546 -0.4967099726200104,-2 0,-2 C0,-2 0,-2 0,-2 C0.4967099726200104,-2 0.8999999761581421,-1.596709966659546 0.8999999761581421,-1.100000023841858z">
-                                            </path>
-                                        </g>
-                                    </g>
-                                </g>
-                            </svg>
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="player-control">
-                    <div class="left">
-                        <div class="play_pause">
-                            <i class="iconfont icon-bofang"></i>
+                    <div class="player-control">
+                        <div class="left">
+                            <div class="play_pause">
+                                <i class="iconfont icon-bofang"></i>
+                            </div>
+                            <div class="timeinfo">
+                                <span class="current_">00:00</span>
+                                <span>/</span>
+                                <span class="duration_">00:00</span>
+                            </div>
                         </div>
-                        <div class="timeinfo">
-                            <span class="current_">00:00</span>
-                            <span>/</span>
-                            <span class="duration_">00:00</span>
-                        </div>
-                    </div>
-                    <div class="right">
-                        <div class="definition">
-                            <span>1080P高清</span>
-                        </div>
-                        <div class="speed">
-                            <span>倍速</span>
-                        </div>
-                        <div class="widescreen">
-                            <span>宽屏</span>
-                        </div>
-                        <div class="pip">
-                            <span>画中画</span>
-                        </div>
-                        <div class="pagefullscreen">
-                            <span>网页全屏</span>
-                        </div>
-                        <div class="fullscreen">
-                            <span>全屏</span>
-                        </div>
-                        <div class="volumn">
-                            <i class="iconfont icon-shengyin_shiti"></i>
+                        <div class="right">
+                            <div class="definition">
+                                <span>1080P高清</span>
+                            </div>
+                            <div class="speed">
+                                <span>倍速</span>
+                            </div>
+                            <div class="widescreen">
+                                <span>宽屏</span>
+                            </div>
+                            <div class="pip">
+                                <span>画中画</span>
+                            </div>
+                            <div class="pagefullscreen">
+                                <span>网页全屏</span>
+                            </div>
+                            <div class="fullscreen">
+                                <span>全屏</span>
+                            </div>
+                            <div class="volumn">
+                                <i class="iconfont icon-shengyin_shiti"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="video-list">
+            <div class="title">
+                <span>视频列表</span>
+                <span class="line"></span>
+            </div>
+            <ul>
+                <li><a href="javascript:void(0);">第01集</a></li>
+                <li><a href="javascript:void(0);">第02集</a></li>
+                <li><a href="javascript:void(0);">第03集</a></li>
+            </ul>
         </div>
     </div>
 
@@ -254,6 +337,8 @@
 
         // 画中画
         const pip = document.querySelector('.pip')
+        // 选集 事件委托
+        const ul = document.querySelector('.video-list>ul')
 
         // 视频总时长
         let duration = 0
@@ -310,13 +395,13 @@
         document.addEventListener('mousemove', currentTimeUpdate)
 
         // 鼠标移出视频区域，隐藏遮罩层
-        player_wrap.addEventListener('mouseout',function(){
+        player_wrap.addEventListener('mouseout', function () {
             // 视频在播放时移出鼠标才会隐藏控制按钮
-            if(video.paused) return
+            if (video.paused) return
             progress_circle.classList.add('hidden')
             player_control.classList.add('hidden')
         })
-        player_wrap.addEventListener('mouseover',function(){
+        player_wrap.addEventListener('mouseover', function () {
             progress_circle.classList.remove('hidden')
             player_control.classList.remove('hidden')
         })
@@ -328,7 +413,6 @@
 
         // 画中画
         pip.addEventListener('click', function () {
-            console.log('in...')
             // 进入画中画
             if (!flag_pip) {
                 video.requestPictureInPicture()
@@ -349,6 +433,23 @@
             console.log('退出画中画...')
         })
 
+        // 选集
+        ul.addEventListener('click', e => {
+            e = e || window.event
+            const target = e.target || e.srcElement
+            if (target.nodeName === 'A') {
+                const text = target.innerText
+                if (text.includes('1')){
+                    video.src = './video/0001-0250.mkv'
+                }
+                if (text.includes('2')){
+                    video.src = './video/0001-0475.mkv'
+                }
+                if (text.includes('3')){
+                    video.src = './video/hzw.mp4'
+                }
+            }
+        })
 
 
         function togglePlayPause() {
@@ -385,11 +486,11 @@
                 return (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s)
             }
         }
-        
+
     </script>
 
     <script>
-        /* 
+        /*
             梳理下功能点
             1. 点击播放图标和暂停图标完成播放和暂停，并完成图标切换
             2. 总时长和当前时长显示
