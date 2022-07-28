@@ -386,7 +386,7 @@
         // 是否宽屏
         let flag_widescreen = false
         // 是否网页全屏
-        let flag_webfullscreeen = false
+        let flag_pagefullscreen = false
 
         let player_wrap_width = getComputedStyle(player_wrap).width
         // video 必须要指定高度，要不然有偏差
@@ -499,7 +499,9 @@
 
         // 宽屏
         widescreen.addEventListener('click', function () {
-            if(flag_webfullscreeen) return
+            console.log('flag_pagefullscreen',flag_pagefullscreen)
+            if(flag_pagefullscreen) return
+            console.log('over',flag_pagefullscreen)
             // 开启宽屏 ,不在网页全屏下
             if (!flag_widescreen ) {
                 video_list.classList.add('hidden')
@@ -524,24 +526,31 @@
         })
         // 网页全屏
         pagefullscreen.addEventListener('click', function () {
-            if (!flag_webfullscreeen) {
+            if (!flag_pagefullscreen) {
                 // 浏览器尺寸
                 const clientW = document.documentElement.clientWidth
                 const clientH = document.documentElement.clientHeight
-                // video_list.classList.add('hidden')
+                console.log(clientW,clientH)
                 player_wrap.classList.add('webfullscreen')
                 player_wrap.style.width = clientW + 'px'
                 player_wrap.style.height = clientH + 'px'
                 player_wrap.style.backgroundColor = '#000'
+                video.style.height = clientH + 'px'
             
-                flag_webfullscreeen = true
+                flag_pagefullscreen = true
             }else {
                 // 退出网页全屏
                 // video_list.classList.remove('hidden')
-                player_wrap.style.width = '82%'
+                if(flag_widescreen){
+                    player_wrap.style.width = '100%'
+                }else{
+                    player_wrap.style.width = '82%'
+                }
+             
+                video.style.height =  player_wrap_height 
                 player_wrap.style.height = player_wrap_height
                 player_wrap.classList.remove('webfullscreen')
-                flag_webfullscreeen = false
+                flag_pagefullscreen = false
             }
 
         })
