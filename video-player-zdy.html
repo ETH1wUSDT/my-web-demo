@@ -12,6 +12,7 @@
             margin: 0;
             padding: 0;
         }
+
         body {
             background-color: #0f0f1e;
         }
@@ -23,18 +24,21 @@
         }
 
         .main {
-            width: 1005px;
+            width: 1200px;
             margin: 150px auto;
             display: flex;
         }
 
         .main>.video-list {
             background-color: #2329315c;
-            width: 205px;
+            width: 18%;
+            min-width: 150px;
+            /* border: 1px solid red; */
         }
 
         .main>.video-list>ul {
             padding-top: 10px;
+            padding-left: 5px;
         }
 
         .main>.video-list>ul>li {
@@ -75,16 +79,36 @@
             left: 19px;
         }
 
+        .main>.video-list.hidden {
+            display: none;
+        }
 
+        /* ------------------- */
         .player-wrap {
-            width: 800px;
+            width: 82%;
+            min-width: 600px;
             /* margin: 50px auto; */
             position: relative;
+            overflow: hidden;
+            z-index: 999;
         }
+
+        .player-wrap.webfullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        /* .player-wrap.active {
+            width: 100%;
+        } */
 
         .player-wrap>video {
             display: block;
             width: 100%;
+            height: 553.5px;
         }
 
         .player-control-mask-wrap {
@@ -138,7 +162,7 @@
             从左侧溢出来
             */
 
-            right: -18px;
+            right: -9px;
             cursor: pointer;
         }
 
@@ -193,6 +217,11 @@
             cursor: pointer;
             color: #fff;
             font-size: 30px;
+        }
+        .clearfix::after{
+            content: '';
+            display: block;
+            clear: both;
         }
     </style>
 </head>
@@ -323,11 +352,12 @@
     </div>
 
     <script>
+        const main = document.querySelector('.main')
         const player_wrap = document.querySelector('.player-wrap')
         const video = document.querySelector('video')
         const player_control = document.querySelector('.player-control')
         const play_pause = document.querySelector('.player-control >.left> .play_pause')
-        const progress_all = document.querySelector('.progress-all')
+        let progress_all = document.querySelector('.progress-all')
         const progress_top = document.querySelector('.progress-top')
         const progress_current = document.querySelector('.progress-current')
         const progress_circle = document.querySelector('.progress-circle')
@@ -339,6 +369,13 @@
         const pip = document.querySelector('.pip')
         // 选集 事件委托
         const ul = document.querySelector('.video-list>ul')
+        // 宽屏
+        const widescreen = document.querySelector('.widescreen')
+        const video_list = document.querySelector('.video-list')
+        // 全屏
+        const fullscreen = document.querySelector('.fullscreen')
+        // 网页全屏
+        const pagefullscreen = document.querySelector('.pagefullscreen')
 
         // 视频总时长
         let duration = 0
@@ -346,10 +383,21 @@
         let flag = false
         // pip是否进入了画中画
         let flag_pip = false
+        // 是否宽屏
+        let flag_widescreen = false
+        // 是否网页全屏
+        let flag_webfullscreeen = false
+
+        let player_wrap_width = getComputedStyle(player_wrap).width
+        // video 必须要指定高度，要不然有偏差
+        let player_wrap_height = getComputedStyle(player_wrap).height
+        // console.log(player_wrap_width,player_wrap_height)
+
         // 进度条总长度, 因为小电视图标向右偏移了18px,我们这里减去这个偏移量，避免图标溢出视频区域
-        const progress_all_width = parseInt(getComputedStyle(progress_all).width)
+        let progress_all_width = parseInt(getComputedStyle(progress_all).width)
         // 进度条的左偏移量
         let offsetLeft_progress = player_wrap.offsetLeft
+
 
         // 播放暂停按钮切换
         play_pause.addEventListener('click', togglePlayPause)
@@ -424,13 +472,11 @@
         })
         // 进入画中画模式触发
         video.addEventListener('enterpictureinpicture', function () {
-            console.log('进入画中画...')
             flag_pip = true
         })
         // 退出画中画模式触发
         video.addEventListener('leavepictureinpicture', function () {
             flag_pip = false
-            console.log('退出画中画...')
         })
 
         // 选集
@@ -439,18 +485,66 @@
             const target = e.target || e.srcElement
             if (target.nodeName === 'A') {
                 const text = target.innerText
-                if (text.includes('1')){
+                if (text.includes('1')) {
                     video.src = './video/0001-0250.mkv'
                 }
-                if (text.includes('2')){
+                if (text.includes('2')) {
                     video.src = './video/0001-0475.mkv'
                 }
-                if (text.includes('3')){
+                if (text.includes('3')) {
                     video.src = './video/hzw.mp4'
                 }
             }
         })
 
+        // 宽屏
+        widescreen.addEventListener('click', function () {
+            if(flag_webfullscreeen) return
+            // 开启宽屏 ,不在网页全屏下
+            if (!flag_widescreen ) {
+                video_list.classList.add('hidden')
+                // player_wrap.classList.add('active')
+                player_wrap.style.width = '100%'
+
+                progress_all_width = parseInt(getComputedStyle(progress_all).width)
+                flag_widescreen = true
+            } else {
+                // 退出宽屏
+                video_list.classList.remove('hidden')
+                // player_wrap.classList.remove('active')
+                player_wrap.style.width = '82%'
+                progress_all_width = parseInt(getComputedStyle(progress_all).width)
+                flag_widescreen = false
+            }
+        })
+
+        // 全屏
+        fullscreen.addEventListener('click', function () {
+            video.requestFullscreen()
+        })
+        // 网页全屏
+        pagefullscreen.addEventListener('click', function () {
+            if (!flag_webfullscreeen) {
+                // 浏览器尺寸
+                const clientW = document.documentElement.clientWidth
+                const clientH = document.documentElement.clientHeight
+                // video_list.classList.add('hidden')
+                player_wrap.classList.add('webfullscreen')
+                player_wrap.style.width = clientW + 'px'
+                player_wrap.style.height = clientH + 'px'
+                player_wrap.style.backgroundColor = '#000'
+            
+                flag_webfullscreeen = true
+            }else {
+                // 退出网页全屏
+                // video_list.classList.remove('hidden')
+                player_wrap.style.width = '82%'
+                player_wrap.style.height = player_wrap_height
+                player_wrap.classList.remove('webfullscreen')
+                flag_webfullscreeen = false
+            }
+
+        })
 
         function togglePlayPause() {
             play_pause.firstElementChild.classList.toggle('icon-zanting2')
