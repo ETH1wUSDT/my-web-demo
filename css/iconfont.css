@@ -1,0 +1,75 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3551713 */
+  src: url('iconfont.woff2?t=1658933879126') format('woff2'),
+       url('iconfont.woff?t=1658933879126') format('woff'),
+       url('iconfont.ttf?t=1658933879126') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-bofang1:before {
+  content: "\e60e";
+}
+
+.icon-bofang2:before {
+  content: "\e693";
+}
+
+.icon-zanting-:before {
+  content: "\e604";
+}
+
+.icon-zanting2:before {
+  content: "\e605";
+}
+
+.icon-bofang3:before {
+  content: "\e633";
+}
+
+.icon-24gf-playSquare:before {
+  content: "\ea88";
+}
+
+.icon-bofang4:before {
+  content: "\e717";
+}
+
+.icon-zanting3:before {
+  content: "\e800";
+}
+
+.icon-yangshengqi:before {
+  content: "\e600";
+}
+
+.icon-zanting:before {
+  content: "\e635";
+}
+
+.icon-bofang:before {
+  content: "\e87c";
+}
+
+.icon-jingyin:before {
+  content: "\e676";
+}
+
+.icon-shengyin_shiti:before {
+  content: "\eca5";
+}
+
+.icon-zanting1:before {
+  content: "\e618";
+}
+
+.icon-bg-play:before {
+  content: "\e63b";
+}
+

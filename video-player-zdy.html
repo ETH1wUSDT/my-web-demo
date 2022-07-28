@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/iconfont.css">
+    <style>
+        .player-wrap {
+            width: 800px;
+            margin: 50px auto;
+            position: relative;
+        }
+
+        .player-wrap>video {
+            display: block;
+            width: 100%;
+        }
+
+        .player-control-mask-wrap {
+            padding: 0 10px;
+            box-sizing: border-box;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            background-color: rgba(211, 56, 56, 0.01);
+        }
+
+
+        .player-control-mask {
+            width: 100%;
+            /* height: 50px; */
+        }
+
+        .player-control-mask>.progress-top {
+            width: 100%;
+        }
+
+        .player-control-mask>.progress-top {
+            position: relative;
+        }
+
+        .player-control-mask>.progress-top>.progress-all {
+            width: 100%;
+            height: 4px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .player-control-mask>.progress-top>.progress-current {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background-color: rgba(0, 174, 236, 1);
+            cursor: pointer;
+        }
+
+        .player-control-mask>.progress-top>.progress-current>.progress-circle {
+            position: absolute;
+            width: 20px;
+            top: -8px;
+            /* 
+            设置18px 的原因： 小电视的宽度是 20px，实际空白还有2px
+            我们让小电视一直处于当前进度条的最右侧定位 ，
+            当 progress-current 为 0 时， right:-18px; 要刚好抵消小电视的宽度，避免小电视图标
+            从左侧溢出来
+            */
+
+            right: -18px;
+            cursor: pointer;
+        }
+        /* 鼠标移出时隐藏进度条小电视机 */
+        .player-control-mask>.progress-top>.progress-current>.progress-circle.hidden{
+            display: none;
+        }
+
+        .player-control {
+            height: 46px;
+            /* background-color: rgba(38, 52, 57, 0.03); */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+        /* 鼠标移出时隐藏控制按钮 */
+        .player-control.hidden{
+            display: none;
+        }
+
+        .player-control>.left {
+            width: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-left: 10px;
+        }
+
+        .player-control>.right {
+            width: 400px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .player-control>.right>div,
+        .player-control>.left>div {
+            color: #ddd;
+            cursor: pointer;
+            padding: 3px 6px;
+        }
+
+        .player-control>.right>div:hover {
+            color: #fff;
+        }
+
+        .play_pause>i,
+        .volumn>i {
+            cursor: pointer;
+            color: #fff;
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="player-wrap">
+        <video src="./video/0001-0250.mkv"></video>
+        <div class="player-control-mask-wrap">
+            <div class="player-control-mask">
+                <div class="progress-top">
+                    <div class="progress-all"></div>
+                    <div class="progress-current">
+                        <div class="progress-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" width="18" height="18"
+                                preserveAspectRatio="xMidYMid meet"
+                                style="width: 100%; height: 100%; transform: translate3d(0px, 0px, 0px);">
+                                <defs>
+                                    <clipPath id="__lottie_element_1403">
+                                        <rect width="18" height="18" x="0" y="0"></rect>
+                                    </clipPath>
+                                </defs>
+                                <g clip-path="url(#__lottie_element_1403)">
+                                    <g transform="matrix(0.9883429408073425,-0.7275781631469727,0.6775955557823181,0.920446515083313,7.3224687576293945,-0.7606706619262695)"
+                                        opacity="1" style="display: block;">
+                                        <g opacity="1"
+                                            transform="matrix(0.9937776327133179,-0.11138220876455307,0.11138220876455307,0.9937776327133179,-2.5239999294281006,1.3849999904632568)">
+                                            <path fill="rgb(51,51,51)" fill-opacity="1"
+                                                d=" M0.75,-1.25 C0.75,-1.25 0.75,1.25 0.75,1.25 C0.75,1.663925051689148 0.4139249920845032,2 0,2 C0,2 0,2 0,2 C-0.4139249920845032,2 -0.75,1.663925051689148 -0.75,1.25 C-0.75,1.25 -0.75,-1.25 -0.75,-1.25 C-0.75,-1.663925051689148 -0.4139249920845032,-2 0,-2 C0,-2 0,-2 0,-2 C0.4139249920845032,-2 0.75,-1.663925051689148 0.75,-1.25z">
+                                            </path>
+                                        </g>
+                                    </g>
+                                    <g transform="matrix(1.1436611413955688,0.7535901665687561,-0.6317168474197388,0.9587040543556213,16.0070743560791,2.902894973754883)"
+                                        opacity="1" style="display: block;">
+                                        <g opacity="1"
+                                            transform="matrix(0.992861807346344,0.1192704513669014,-0.1192704513669014,0.992861807346344,-2.5239999294281006,1.3849999904632568)">
+                                            <path fill="rgb(51,51,51)" fill-opacity="1"
+                                                d=" M0.75,-1.25 C0.75,-1.25 0.75,1.25 0.75,1.25 C0.75,1.663925051689148 0.4139249920845032,2 0,2 C0,2 0,2 0,2 C-0.4139249920845032,2 -0.75,1.663925051689148 -0.75,1.25 C-0.75,1.25 -0.75,-1.25 -0.75,-1.25 C-0.75,-1.663925051689148 -0.4139249920845032,-2 0,-2 C0,-2 0,-2 0,-2 C0.4139249920845032,-2 0.75,-1.663925051689148 0.75,-1.25z">
+                                            </path>
+                                        </g>
+                                    </g>
+                                    <g transform="matrix(1,0,0,1,8.890999794006348,8.406000137329102)" opacity="1"
+                                        style="display: block;">
+                                        <g opacity="1"
+                                            transform="matrix(1,0,0,1,0.09099999815225601,1.1009999513626099)">
+                                            <path fill="rgb(255,255,255)" fill-opacity="1"
+                                                d=" M7,-3 C7,-3 7,3 7,3 C7,4.379749774932861 5.879749774932861,5.5 4.5,5.5 C4.5,5.5 -4.5,5.5 -4.5,5.5 C-5.879749774932861,5.5 -7,4.379749774932861 -7,3 C-7,3 -7,-3 -7,-3 C-7,-4.379749774932861 -5.879749774932861,-5.5 -4.5,-5.5 C-4.5,-5.5 4.5,-5.5 4.5,-5.5 C5.879749774932861,-5.5 7,-4.379749774932861 7,-3z">
+                                            </path>
+                                            <path stroke-linecap="butt" stroke-linejoin="miter" fill-opacity="0"
+                                                stroke-miterlimit="4" stroke="rgb(51,51,51)" stroke-opacity="1"
+                                                stroke-width="1.5"
+                                                d=" M7,-3 C7,-3 7,3 7,3 C7,4.379749774932861 5.879749774932861,5.5 4.5,5.5 C4.5,5.5 -4.5,5.5 -4.5,5.5 C-5.879749774932861,5.5 -7,4.379749774932861 -7,3 C-7,3 -7,-3 -7,-3 C-7,-4.379749774932861 -5.879749774932861,-5.5 -4.5,-5.5 C-4.5,-5.5 4.5,-5.5 4.5,-5.5 C5.879749774932861,-5.5 7,-4.379749774932861 7,-3z">
+                                            </path>
+                                        </g>
+                                    </g>
+                                    <g transform="matrix(1,0,0,1,8.89900016784668,8.083999633789062)" opacity="1"
+                                        style="display: block;">
+                                        <g opacity="1"
+                                            transform="matrix(1,0,0,1,-2.5239999294281006,1.3849999904632568)">
+                                            <path fill="rgb(51,51,51)" fill-opacity="1"
+                                                d=" M0.875,-1.125 C0.875,-1.125 0.875,1.125 0.875,1.125 C0.875,1.607912540435791 0.48291251063346863,2 0,2 C0,2 0,2 0,2 C-0.48291251063346863,2 -0.875,1.607912540435791 -0.875,1.125 C-0.875,1.125 -0.875,-1.125 -0.875,-1.125 C-0.875,-1.607912540435791 -0.48291251063346863,-2 0,-2 C0,-2 0,-2 0,-2 C0.48291251063346863,-2 0.875,-1.607912540435791 0.875,-1.125z">
+                                            </path>
+                                        </g>
+                                    </g>
+                                    <g transform="matrix(1,0,0,1,14.008999824523926,8.083999633789062)" opacity="1"
+                                        style="display: block;">
+                                        <g opacity="1"
+                                            transform="matrix(1,0,0,1,-2.5239999294281006,1.3849999904632568)">
+                                            <path fill="rgb(51,51,51)" fill-opacity="1"
+                                                d=" M0.8999999761581421,-1.100000023841858 C0.8999999761581421,-1.100000023841858 0.8999999761581421,1.100000023841858 0.8999999761581421,1.100000023841858 C0.8999999761581421,1.596709966659546 0.4967099726200104,2 0,2 C0,2 0,2 0,2 C-0.4967099726200104,2 -0.8999999761581421,1.596709966659546 -0.8999999761581421,1.100000023841858 C-0.8999999761581421,1.100000023841858 -0.8999999761581421,-1.100000023841858 -0.8999999761581421,-1.100000023841858 C-0.8999999761581421,-1.596709966659546 -0.4967099726200104,-2 0,-2 C0,-2 0,-2 0,-2 C0.4967099726200104,-2 0.8999999761581421,-1.596709966659546 0.8999999761581421,-1.100000023841858z">
+                                            </path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="player-control">
+                    <div class="left">
+                        <div class="play_pause">
+                            <i class="iconfont icon-bofang"></i>
+                        </div>
+                        <div class="timeinfo">
+                            <span class="current_">00:00</span>
+                            <span>/</span>
+                            <span class="duration_">00:00</span>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="definition">
+                            <span>1080P高清</span>
+                        </div>
+                        <div class="speed">
+                            <span>倍速</span>
+                        </div>
+                        <div class="widescreen">
+                            <span>宽屏</span>
+                        </div>
+                        <div class="pip">
+                            <span>画中画</span>
+                        </div>
+                        <div class="pagefullscreen">
+                            <span>网页全屏</span>
+                        </div>
+                        <div class="fullscreen">
+                            <span>全屏</span>
+                        </div>
+                        <div class="volumn">
+                            <i class="iconfont icon-shengyin_shiti"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const player_wrap = document.querySelector('.player-wrap')
+        const video = document.querySelector('video')
+        const player_control = document.querySelector('.player-control')
+        const play_pause = document.querySelector('.player-control >.left> .play_pause')
+        const progress_all = document.querySelector('.progress-all')
+        const progress_top = document.querySelector('.progress-top')
+        const progress_current = document.querySelector('.progress-current')
+        const progress_circle = document.querySelector('.progress-circle')
+        // 时长元素
+        const current_ = document.querySelector('.current_')
+        const duration_ = document.querySelector('.duration_')
+
+        // 画中画
+        const pip = document.querySelector('.pip')
+
+        // 视频总时长
+        let duration = 0
+        // 能否拖拽
+        let flag = false
+        // pip是否进入了画中画
+        let flag_pip = false
+        // 进度条总长度, 因为小电视图标向右偏移了18px,我们这里减去这个偏移量，避免图标溢出视频区域
+        const progress_all_width = parseInt(getComputedStyle(progress_all).width)
+        // 进度条的左偏移量
+        let offsetLeft_progress = player_wrap.offsetLeft
+
+        // 播放暂停按钮切换
+        play_pause.addEventListener('click', togglePlayPause)
+        video.addEventListener('click', togglePlayPause)
+        video.addEventListener('canplay', function () {
+            duration = this.duration
+            duration_.innerText = formatTime(duration)
+        })
+
+        video.addEventListener('timeupdate', function () {
+            // currentTime 时间更新
+            current_.innerText = formatTime(this.currentTime)
+            // 进度条随播放时间变化
+            const current = video.currentTime
+            const w = current / duration * progress_all_width
+            progress_current.style.width = w + 'px'
+
+            // 播放暂停图标切换，进入画中画模式后适用
+            if (video.paused) {
+                play_pause.firstElementChild.classList.add('icon-bofang')
+                play_pause.firstElementChild.classList.remove('icon-zanting2')
+            } else {
+                play_pause.firstElementChild.classList.add('icon-zanting2')
+                play_pause.firstElementChild.classList.remove('icon-bofang')
+            }
+        })
+
+        // 进度条点击
+        progress_top.addEventListener('mousedown', function (e) {
+            flag = true
+            currentTimeUpdate(e)
+        })
+
+        // 进度条拖拽
+        progress_circle.addEventListener('mousedown', function (e) {
+            // 可以开始进度条拖拽
+            flag = true
+        })
+        document.addEventListener('mouseup', function () {
+            // 取消进度条拖拽
+            flag = false
+        })
+        document.addEventListener('mousemove', currentTimeUpdate)
+
+        // 鼠标移出视频区域，隐藏遮罩层
+        player_wrap.addEventListener('mouseout',function(){
+            // 视频在播放时移出鼠标才会隐藏控制按钮
+            if(video.paused) return
+            progress_circle.classList.add('hidden')
+            player_control.classList.add('hidden')
+        })
+        player_wrap.addEventListener('mouseover',function(){
+            progress_circle.classList.remove('hidden')
+            player_control.classList.remove('hidden')
+        })
+
+        // 屏幕尺寸改变时从新获取一些变量
+        document.onresize = function () {
+            offsetLeft_progress = player_wrap.offsetLeft
+        }
+
+        // 画中画
+        pip.addEventListener('click', function () {
+            console.log('in...')
+            // 进入画中画
+            if (!flag_pip) {
+                video.requestPictureInPicture()
+            } else {
+                // 退出画中画
+                document.exitPictureInPicture()
+            }
+
+        })
+        // 进入画中画模式触发
+        video.addEventListener('enterpictureinpicture', function () {
+            console.log('进入画中画...')
+            flag_pip = true
+        })
+        // 退出画中画模式触发
+        video.addEventListener('leavepictureinpicture', function () {
+            flag_pip = false
+            console.log('退出画中画...')
+        })
+
+
+
+        function togglePlayPause() {
+            play_pause.firstElementChild.classList.toggle('icon-zanting2')
+            play_pause.firstElementChild.classList.toggle('icon-bofang')
+            if (video.paused) {
+                video.play()
+            } else {
+                video.pause()
+            }
+        }
+
+        function currentTimeUpdate(e) {
+            if (!flag) return
+            // console.log(e.pageX, offsetLeft_progress)
+            // 进度条前进的像素，不能超过 progress-all 的宽度
+            let d = e.pageX - offsetLeft_progress
+            if (d < 0) d = 0
+            if (d > progress_all_width) d = progress_all_width
+            // circle 里面小电视的宽度差不多是 18 px
+            progress_current.style.width = d + 'px'
+
+            // 改变视频currenttime
+            video.currentTime = d / progress_all_width * duration
+            current_.innerText = formatTime(video.currentTime)
+        }
+
+        // 阻止遮罩层文本选中
+        // 格式化时间
+        function formatTime(second) {
+            const m = parseInt(second / 60)
+            if (m < 100) {
+                const s = parseInt(second % 60)
+                return (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s)
+            }
+        }
+        
+    </script>
+
+    <script>
+        /* 
+            梳理下功能点
+            1. 点击播放图标和暂停图标完成播放和暂停，并完成图标切换
+            2. 总时长和当前时长显示
+            3. 进度条随着播放时长改变
+            4. 进度条可以拖拽，拖拽时完成进度条显示变化，以及播放currentTime的变化
+            5. 进度条可以点击，完成当前播放位置的切换
+            6. 阻止遮罩层文字选中
+            7. 画中画模式的开启和关闭
+            8. 宽屏模式
+            9. 网页全屏
+            10. 全屏
+            11. 手机端全屏时横屏， 横屏时全屏
+            补充：
+            12. 当时拍在播放 移出时 隐藏 player-control ，并且进度条不显示小电视图标
+        */
+    </script>
+</body>
+
+</html>
