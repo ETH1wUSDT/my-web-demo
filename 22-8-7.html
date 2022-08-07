@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            width: 100%;
+        }
+
+        .header {
+            width: 118%;
+            height: 360px;
+            box-sizing: border-box;
+            min-width: 540px;
+            /* border-top-right-radius: 50%; */
+            border-bottom-right-radius: 50%;
+            background-image: linear-gradient(-220deg,
+                    rgb(46, 15, 118) 0%,
+                    rgb(73, 29, 135) 50%,
+                    rgb(126, 0, 131) 100%);
+
+            /* 
+            linear-gradient(-547deg, rgb(46, 15, 118) 0%, rgb(73, 29, 135) 50%, rgb(126, 0, 131) 100%) !important
+            */
+            overflow: hidden;
+        }
+
+        .header>.wrap-boxfixed {
+            width: calc(1/1.18*100%);
+            color: #333;
+            /* border: 1px solid #ccc; */
+            height: 90%;
+        }
+
+        .wrap-header {
+            width: 80%;
+            height: 100%;
+            margin: 0 auto;
+            /* border: 1px solid orangered; */
+            box-sizing: border-box;
+            color: #fff;
+            padding: 0 10px;
+        }
+
+        .nav {
+            font-size: 20px;
+            /* border: 1px solid #aaa; */
+            box-sizing: border-box;
+            height: 15%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav>span {
+            margin-right: 20px;
+        }
+
+        .content {
+            box-sizing: border-box;
+            height: 85%;
+            /* border: 1px solid blue; */
+        }
+
+        .content>h3 {
+            font-size: 35px;
+            margin: 50px 0px 15px 0px;
+        }
+
+        .content>p {
+            font-weight: 400;
+            font-size: 1rem;
+            font-family: Montserrat, Montserrat Light, Helvetica Neue, Helvetica, arial, sans-serif !important;
+        }
+        *::selection {
+            background: skyblue;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="header">
+            <div class="wrap-boxfixed">
+                <div class="wrap-header">
+                    <div class="nav">
+                        <span>Lorem.</span>
+                        <span>ipsum.</span>
+                        <span>dolor.</span>
+                    </div>
+                    <div class="content">
+                        <h3>Lorem ipsum dolor, sit amet consectetur.</h3>
+                        <p>Uncover the latest Podcasts, Ratings & Reviews, Guest Credits, Curated Lists, and more!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        // document.onselectionchange=function(){
+        //     console.log('selected')
+            
+        // }
+    </script>
+</body>
+
+</html>
