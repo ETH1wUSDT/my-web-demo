@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul,
+        li,
+        ol {
+            list-style-type: none;
+        }
+
+        .banner {
+            width: 960px;
+            height: 400px;
+            margin: 300px auto;
+            /* border: 1px solid #333; */
+            perspective: 1000px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        ul {
+            width: 20%;
+            float: left;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            /* 先往后等会往前 */
+            /* transform: translateZ(-200px) rotateX(0deg) rotateY(0deg) rotateZ(0deg); */
+            transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+            /* 需要重新设置旋转轴 */
+            /* 这也还是有空隙啊 */
+            transform-origin: 50% 50% -200px;
+        }
+
+        ul>li {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform-style: preserve-3d;
+            opacity: 1;
+        }
+
+        ul>li:nth-child(1) {
+            background: url(./img/banner1_1920x800.webp) no-repeat 0 0 / 960px 400px;
+            /* transform: translateZ(200px); */
+        }
+
+        ul>li:nth-child(2) {
+            background: url(./img/banner2_1920x800.webp) no-repeat 0 0 / 960px 400px;
+            transform: rotateX(90deg) translateZ(200px) translateY(-200px);
+            /* transform: rotateX(90deg) translateZ(200px); */
+        }
+
+        ul>li:nth-child(3) {
+            background: url(./img/banner3_1920x800.webp) no-repeat 0 0 / 960px 400px;
+            transform: rotateX(180deg) translateZ(400px);
+            /* transform: rotateX(180deg) translateZ(200px); */
+        }
+
+        ul>li:nth-child(4) {
+            background: url(./img/banner4_1920x800.webp) no-repeat 0 0 / 960px 400px;
+            transform: rotateX(270deg) translateZ(200px) translateY(200px);
+            /* transform: rotateX(270deg) translateZ(200px); */
+        }
+
+        ul:nth-child(1) {
+            z-index: 1;
+        }
+
+        ul:nth-child(2) {
+            z-index: 2;
+        }
+
+        ul:nth-child(3) {
+            z-index: 3;
+        }
+
+        ul:nth-child(4) {
+            z-index: 2;
+        }
+
+        ul:nth-child(5) {
+            z-index: 1;
+        }
+
+        ul:nth-child(2)>li {
+            background-position: -192px 0;
+        }
+
+        ul:nth-child(3)>li {
+            background-position: -384px 0;
+        }
+
+        ul:nth-child(4)>li {
+            background-position: -576px 0;
+        }
+
+        ul:nth-child(5)>li {
+            background-position: -768px 0;
+        }
+
+        .banner>p {
+            position: absolute;
+            top: 420px;
+            padding: 8px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: rgb(126, 0, 131);
+            color: #fff;
+        }
+
+        .start {
+            left: 400px;
+        }
+
+        .stop {
+            left: 500px;
+        }
+
+        p:hover {
+            /* background-color: orangered; */
+            color: #eee;
+            background-image: linear-gradient(-220deg,
+                    rgba(46, 15, 118, .8) 0%,
+                    rgb(73, 29, 135) 40%,
+                    rgb(126, 0, 131) 100%);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="banner">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <p class="start">start</p>
+        <!-- <p class="stop">stop</p> -->
+    </div>
+
+    <script>
+        const start = document.querySelector('.start')
+        // const stop = document.querySelector('.stop')
+        const uls = document.querySelectorAll('ul')
+        let degrees = []
+        let flag = false
+
+        start.addEventListener('click', () => {
+            if (flag) return
+            flag = true
+            // 旋转函数
+            specialEffectRotate(uls, () => { flag = false })
+        })
+        // stop.addEventListener('click', () => {
+        //     clearInterval(timer)
+        //     flag = false
+        // })
+        document.onselectstart = function (e) {
+            e.preventDefault()
+        }
+
+
+        function specialEffectRotate(eles, cb) {
+            let queue = []
+            let executeQueue = []
+            let elements
+            let timer = 0
+            let count = 0
+            let gap = 20  //过  1000/60 *gap 时间后，下一个 ul 开始旋转
+            if (Object.prototype.toString.call(eles).slice(8, -1) === 'NodeList') {
+                elements = eles
+            } else {
+                elements = document.querySelectorAll(eles)
+            }
+            for (let i = 0; i < elements.length; i++) {
+                queue.push(elements[i])
+            }
+            timer = setInterval(() => {
+                // 不直接去操作原数组，当队列里有数据时,每循环 gap 次就拿出一个放到执行队列里面
+                if (queue.length && count % gap === 0) {
+                    executeQueue.push({ ele: queue.shift(), degree: 0 })
+                }
+                count++
+                executeQueue.forEach((item, index) => {
+                    item.degree += 2
+                    if (item.degree > 90) return
+                    if (item.ele.style.transform) {
+                        item.ele.style.transform = `rotateX(${parseInt(item.ele.style.transform.slice(8)) + 2}deg)`
+                    } else {
+                        item.ele.style.transform = `rotateX(${item.degree}deg)`
+                    }
+                })
+                if (executeQueue.length === elements.length && executeQueue[elements.length - 1].degree % 90 === 0) {
+                    clearInterval(timer)
+                    console.log('定时器已经关闭')
+                    cb()
+                }
+
+                // cb(executeQueue, timer)
+            }, 1000 / 60)
+        }
+    </script>
+</body>
+
+</html>
