@@ -89,7 +89,7 @@
                     this.drawDescLine(startAngle + item.angle / 2, item.title)
 
                     // 绘制说明色块
-                    this.drawDescRect(index, item.title)
+                    this.drawDescRect(index, item.title.slice(0,-5))
 
                     startAngle = endAngle
                 })
