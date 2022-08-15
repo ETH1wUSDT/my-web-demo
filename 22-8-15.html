@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            border: 1px solid #333;
+            display: block;
+            margin: 100px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="900" height="600"></canvas>
+
+
+    <script>
+        class PieChart {
+            constructor(ele, data) {
+                // 获取元素
+                this.ele = document.querySelector(ele)
+                // 工具箱/上下文
+                this.ctx = this.ele.getContext('2d')
+                // 数据赋值
+                this.data = data
+                // 数值总和
+                this.total = this.data.reduce((value, item) => value + item.num, 0)
+                // 转换后的数据，用于渲染饼图
+                this.canvasData = []
+                // 饼图圆心
+                this.origin = { x: this.ele.width - this.ele.height * 2 / 3, y: this.ele.height / 2 }
+                // 半径
+                this.radius = this.ele.height / 3
+                // 描述线长度
+                this.descLine = this.radius + 35
+                // 启动器
+                this.init()
+            }
+            // 启动器
+            init() {
+                // 1.处理转换数据
+                this.transformData()
+                // 2.循环绘制饼图
+                this.drawPie()
+            }
+            // 0.随机颜色
+            randomColor() {
+                return `rgb(
+                    ${Math.floor(Math.random() * 256)},
+                    ${Math.floor(Math.random() * 256)},
+                    ${Math.floor(Math.random() * 256)}
+                )`
+            }
+
+            // 1.转换数据
+            transformData() {
+                this.canvasData = this.data.map(item => {
+                    return { ...item, angle: Math.PI * 2 * item.num / this.total }
+                })
+            }
+
+            // 2.循环画出饼图、顺便绘制延长线，文本，说明
+            drawPie() {
+                let startAngle = 0
+                this.canvasData.forEach((item, index) => {
+                    let endAngle = startAngle + item.angle
+                    this.ctx.beginPath()
+                    this.ctx.moveTo(this.origin.x, this.origin.y)
+                    this.ctx.arc(this.origin.x, this.origin.y, this.radius, startAngle, endAngle)
+                    this.ctx.closePath()
+
+                    // 画笔颜色配置
+                    let color = this.randomColor()
+                    this.ctx.fillStyle = color
+                    this.ctx.strokeStyle = color
+                    this.ctx.fill()
+
+                    // 画延长线
+                    this.drawDescLine(startAngle + item.angle / 2, item.title)
+
+                    // 绘制说明色块
+                    this.drawDescRect(index, item.title)
+
+                    startAngle = endAngle
+                })
+            }
+
+            // 3. 画延长线跟描述文本
+            drawDescLine(angle, text) {
+                let x = this.descLine * Math.cos(angle)
+                let y = this.descLine * Math.sin(angle)
+                this.ctx.font = '16px 微软雅黑'
+                // 获取要画的文本宽度
+                let width = this.ctx.measureText(text).width + 10
+                this.ctx.beginPath()
+                this.ctx.moveTo(this.origin.x, this.origin.y)
+                this.ctx.lineTo(this.origin.x + x, this.origin.y + y)
+                if (x < 0) {
+                    this.ctx.lineTo(this.origin.x + x - width, this.origin.y + y)
+                    this.ctx.textAlign = 'right'
+                    x -= 10
+                } else {
+                    this.ctx.lineTo(this.origin.x + x + width, this.origin.y + y)
+                    this.ctx.textAlign = 'left'
+                    x += 10
+                }
+                this.ctx.textBaseline = 'bottom'
+                this.ctx.fillText(text, this.origin.x + x, this.origin.y + y)
+                this.ctx.stroke()
+            }
+
+            // 4. 绘制说明色块
+            drawDescRect(index, text) {
+                let gap = 30
+                let width = 40
+                let height = 20
+                // 我们假设左边跟上边的间隙留30px
+                this.ctx.beginPath()
+                this.ctx.fillRect(gap, index * gap + gap, width, height)
+                this.ctx.textBaseline = 'middle'
+                this.ctx.textAlign = 'left'
+                this.ctx.font = '12px 微软雅黑'
+                // this.ctx.moveTo(80, index * 30 + 30 + 10)
+                // this.ctx.lineTo(200, index * 30 + 30 + 10)
+                // this.ctx.stroke()
+                this.ctx.fillText(text, 80, index * 30 + 30 + 10)
+            }
+        }
+
+
+
+
+
+        const data = [
+            { title: '15~20score', num: 17 },
+            { title: '20~25score', num: 22 },
+            { title: '25~30score', num: 33 },
+            { title: '30~35score', num: 11 },
+            { title: '35~40score', num: 22 },
+            { title: '40~45score', num: 23 },
+            { title: '45~50score', num: 22 },
+            { title: '50~55score', num: 33 },
+            { title: '55~60score', num: 33 },
+            { title: '60~65score', num: 33 },
+            { title: '70~75score', num: 33 },
+            { title: '75~80score', num: 33 },
+            { title: '80~85score', num: 33 },
+            { title: '85~90score', num: 33 },
+            { title: '90~95score', num: 33 },
+            { title: '95~100score', num: 33 }
+        ]
+        const pc = new PieChart('canvas', data)
+        console.log(pc)
+
+    </script>
+
+</body>
+
+</html>
