@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            display: block;
+            border: 1px solid;
+
+        }
+
+        .box {
+            position: relative;
+        }
+
+        div.slicing_box {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 1px solid #333;
+            top: 0;
+            left: 0;
+            background-color: rgba(159, 148, 148, 0.3);
+        }
+
+        .preview {
+            width: 600px;
+            display: flex;
+        }
+
+        .preview>img {
+            display: block;
+            margin-left: 20px;
+        }
+
+        .preview>img:nth-child(1) {
+            margin-left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <canvas width="600" height="256"></canvas>
+        <div class="slicing_box"></div>
+        <button>裁剪</button>
+    </div>
+
+    <div class="preview">
+    </div>
+    <script>
+        /*
+            drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+            1. image 图片源
+            2. sx,sy,sWidth,sHeight 定义图片源的切片位置和大小
+            3. dx,dy,dWidth,dHeight 定义切片的目标显示位置和大小
+        */
+        const btn = document.querySelector('button')
+        const preview_box = document.querySelector('.preview')
+        const box = document.querySelector('.box')
+        const sb = document.querySelector('.slicing_box')
+        const canvas = document.querySelector('canvas')
+        const ctx = canvas.getContext('2d')
+        const img = new Image()
+        img.src = '../img/3.webp'
+
+        let flag = false
+        let loaded_flag = false
+        let x, y
+        let imageData = new ImageData(100, 100)
+        sb.onmousedown = function () {
+            flag = true
+            // console.log(flag)
+        }
+        sb.onmousemove = function (e) {
+            if (!flag || !loaded_flag) return
+            x = e.pageX - box.offsetLeft
+            y = e.pageY - box.offsetTop
+            if (x < 50) {
+                x = 50
+            }
+            if (y < 50) {
+                y = 50
+            }
+            if (x > 206) {
+                x = 206
+            }
+            if (y > 206) {
+                y = 206
+            }
+            sb.style.left = x - 50 + 'px'
+            sb.style.top = y - 50 + 'px'
+            // console.log(x, y)
+            imageData = slicing()
+            console.log(imageData)
+        }
+        document.onmouseup = function () {
+            flag = false
+            console.log(x, y)
+        }
+
+        img.onload = function () {
+            // 加载后才能裁剪
+            loaded_flag = true
+            const ratio_w = img.naturalWidth / ctx.canvas.width
+            const ratio_h = img.naturalHeight / ctx.canvas.height
+            let x, y
+            if (ratio_w > ratio_h) {
+                x = ctx.canvas.width
+                y = img.naturalHeight / ratio_w
+            } else {
+                y = ctx.canvas.height
+                x = img.naturalWidth / ratio_h
+            }
+
+            ctx.drawImage(img, 0, 0, x, y)
+        }
+
+        function slicing() {
+            ctx.clearRect(420, 100, 100, 100)
+            ctx.drawImage(img, 2 * (x - 50), 2 * (y - 50), 100 * 2, 100 * 2, 420, 100, 100, 100)
+            return ctx.getImageData(420, 100, 100, 100)
+        }
+
+        btn.addEventListener('click', function () {
+            const c = document.createElement('canvas')
+            // preview_box.appendChild(c)
+            const c_ctx = c.getContext('2d')
+            c.width = 100
+            c.height = 100
+            c_ctx.putImageData(imageData, 0, 0, 0, 0, 100, 100)
+            const img = new Image()
+            img.src = c.toDataURL('image/webp', 1)
+            preview_box.appendChild(img)
+        })
+
+    </script>
+</body>
+
+</html>
