@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            /* background-color: rgba(0, 0, 0, .2); */
+        }
+
+        button {
+            /* border: none; */
+            /* outline: none; */
+        }
+
+        .box {
+            width: 960px;
+            box-sizing: border-box;
+            margin: 20px auto;
+            border: 2px dotted rgba(33, 33, 33, .2);
+            padding: 20px;
+        }
+
+
+        .upload {
+            margin-bottom: 20px;
+        }
+
+        .box>.upload>form>input[type=file] {
+            display: none;
+        }
+
+        .box>.upload>form>label,
+        .operations>button {
+            background-color: #08c8c0;
+            padding: 8px 16px;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            /* display: inline-block; */
+            outline: none;
+            border: none;
+            box-shadow: 1px 1px 1px 1px #aaa;
+        }
+
+        .operations>button {
+            background-color: #fff;
+            color: #000;
+            margin: 0 10px 10px 0px;
+        }
+
+
+        .operations>button:hover {
+            box-shadow: -1px -1px 1px 1px #aaa;
+        }
+
+        .preview_wrap {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .preview_box canvas {
+            display: block;
+            border: 1px solid #333;
+        }
+
+        .preview_box .compressed {
+            display: none;
+        }
+
+        .preview_box .compressed.active {
+            display: block;
+        }
+
+        .preview_box .compressed>img {
+            display: block;
+            width: 450px;
+            height: 450px;
+        }
+
+        .preview_canvas {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="upload">
+            <form action="">
+                <label for="file-upload">
+                    <span>选中一张本地图片</span>
+                </label>
+                <input type="file" name="" id="file-upload">
+            </form>
+        </div>
+        <div class="operations">
+            <button class="crop_btn">裁剪</button>
+            <button class="compress_btn">压缩图片大小</button>
+        </div>
+        <div class="preview_box">
+            <div class="preview_wrap">
+                <div class="preview_canvas">
+                    <!-- <div class="crop_box"></div> -->
+                    <canvas width="450" height="450"></canvas>
+                </div>
+                <div class="compressed active">
+                    <img src="" alt="">
+                </div>
+            </div>
+            <div class="img_desc">
+            </div>
+        </div>
+        <div class="final_upload_img">
+            <img src="" alt="">
+        </div>
+    </div>
+
+    <script>
+        /* 
+            总结： 我这代码自己写完自己都不想再看了
+            事件处理函数里面能抽出来的东西劲量抽出来当方法，哪怕是创建元素 添加样式等
+        */
+        const ACCEPT = ['image/jpg', 'image/png', 'image/jpeg', 'image/webp']
+        const MAX_SIZE = 3024 * 1024
+        const MAX_SIZE_STR = '1M'
+        const IMG_DESC = {
+            originalSize: '',
+            coverToBase64Szie: '',
+            compressedSize: ''
+        }
+
+        const compressed_img = document.querySelector('.compressed > img')
+        const img_desc = document.querySelector('.img_desc')
+        const final_upload_img = document.querySelector('.final_upload_img')
+        const inputFile = document.querySelector('input[type=file]')
+        const ctx = document.querySelector('canvas').getContext('2d')
+        const previewCanvas = document.querySelector('.preview_canvas')
+        const cropBtn = document.querySelector('.crop_btn')
+        const compress_btn = document.querySelector('.compress_btn')
+
+        let isCanvasDrawed = false
+        let isCanCrop = false
+        // 裁剪框
+        let cropBox
+        let cropStartPoint = { x: 0, y: 0 }
+        let cropEndPoint = { x: 0, y: 0 }
+
+        // 1. 选取文件
+        inputFile.addEventListener('change', function () {
+            // 先做校验
+            // 是否上传了内容
+            if (!this.files.length) return
+            // 是否是图片格式
+            const { size: fileSize, type: fileType } = this.files[0]
+            // 原图片大小
+            IMG_DESC.originalSize = fileSize
+            if (!ACCEPT.includes(fileType)) {
+                return alert(`可选的图片格式为${ACCEPT.toString()}`)
+            }
+            // 图片大小检查
+            if (fileSize > MAX_SIZE) {
+                return alert('图片大小超过了' + MAX_SIZE_STR)
+            }
+            drawImg(ctx, this.files[0])
+        })
+
+        // 2. 裁剪
+        document.addEventListener('mousedown', function (e) {
+            e = e || window.event
+            const target = e.target || e.srcElement
+            if (target.nodeName === 'CANVAS') {
+                handlerMouseDown(e)
+            } else {
+                isCanCrop = false
+                cropBox && cropBox.remove()
+            }
+        })
+        // previewCanvas.addEventListener('mousedown', handlerMouseDown)
+
+        function handlerMouseDown(e) {
+            // 如果 canvas 还没绘制图形，直接返回
+            if (!isCanvasDrawed) return
+            isCanCrop = true
+            cropStartPoint.x = e.pageX - previewCanvas.offsetLeft
+            cropStartPoint.y = e.pageY - previewCanvas.offsetTop
+            if (cropBox) {
+                cropBox.remove()
+            }
+            // 在这里去创建这个 裁剪框
+            cropBox = document.createElement('div')
+            cropBox.style.position = 'absolute'
+            cropBox.style.left = cropStartPoint.x + 'px'
+            cropBox.style.top = cropStartPoint.y + 'px'
+            cropBox.style.border = '3px solid rgb(207, 81, 81)'
+            previewCanvas.appendChild(cropBox)
+
+        }
+
+        document.addEventListener('mousemove', function (e) {
+            if (!isCanCrop) return
+            cropEndPoint.x = e.pageX - previewCanvas.offsetLeft
+            cropEndPoint.y = e.pageY - previewCanvas.offsetTop
+            if (cropEndPoint.x < 0) { cropEndPoint.x = 0 }
+            if (cropEndPoint.x > ctx.canvas.width) { cropEndPoint.x = ctx.canvas.width - parseInt(cropBox.style.border) }
+            if (cropEndPoint.y < 0) { cropEndPoint.y = 0 }
+            if (cropEndPoint.y > ctx.canvas.height) { cropEndPoint.y = ctx.canvas.height - parseInt(cropBox.style.border) }
+            cropBox.style.left = Math.min(cropStartPoint.x, cropEndPoint.x) + 'px'
+            cropBox.style.top = Math.min(cropEndPoint.y, cropStartPoint.y) + 'px'
+            cropBox.style.width = Math.abs(cropEndPoint.x - cropStartPoint.x) + 'px'
+            cropBox.style.height = Math.abs(cropEndPoint.y - cropStartPoint.y) + 'px'
+        })
+
+        document.addEventListener('mouseup', function (e) {
+            isCanCrop = false
+        })
+
+        /* 裁剪按钮 */
+        cropBtn.addEventListener('click', function () {
+            if (!cropBox) return
+            const sx = parseInt(cropBox.style.left)
+            const sy = parseInt(cropBox.style.top)
+            const sw = parseInt(cropBox.style.width)
+            const sh = parseInt(cropBox.style.height)
+            const tmpCanvas = document.createElement('canvas')
+            tmpCanvas.width = sw
+            tmpCanvas.height = sh
+            tmpCanvas.getContext('2d').putImageData(ctx.getImageData(sx, sy, sw, sh), 0, 0)
+            const img = new Image()
+            img.src = tmpCanvas.toDataURL(inputFile.files[0].type, 1)
+            final_upload_img.appendChild(img)
+        })
+
+        /* 压缩图片按钮 */
+        compress_btn.addEventListener('click', function () {
+            if (!isCanvasDrawed) return
+            compressed_img.src = ctx.canvas.toDataURL(inputFile.files[0].type, .3)
+            IMG_DESC.compressedSize = compressed_img.src.length
+            // img_desc.innerHTML = `原图片大小:${IMG_DESC.originalSize};转base64后的图片大小:${IMG_DESC.coverToBase64Szie};压缩后的图片大小:${IMG_DESC.compressedSize}`
+            img_desc.innerHTML = `
+            <p>原图片大小:${IMG_DESC.originalSize};</p>
+            <p>转base64后的图片大小:${IMG_DESC.coverToBase64Szie};</p>
+            <p>压缩后的图片大小:${IMG_DESC.compressedSize};</p>
+            `
+        })
+
+        // 把传入的图片 在 canvas上绘制
+        function drawImg(ctx, file) {
+            converImageToBase64(file, function (base64Image) {
+                const image = new Image()
+                image.src = base64Image
+                IMG_DESC.coverToBase64Szie = image.src.length
+                // 用 canvas 把图画出来
+                image.addEventListener('load', function () {
+                    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+                    // 获取图片尺寸压缩后的宽高
+                    const { width, height } = compress(ctx, image)
+                    ctx.drawImage(image, (ctx.canvas.width - width) / 2, (ctx.canvas.height - height) / 2, width, height)
+                    isCanvasDrawed = true
+                })
+            })
+        }
+
+        // 使用 FileReader 把 file 转成 base64 编码
+        function converImageToBase64(file, callback) {
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.addEventListener('load', function () {
+                const base64Image = reader.result
+                callback && callback(base64Image)
+                // 让 render 用完被回收
+                render = null
+            })
+        }
+
+        // 尺寸压缩
+        function compress(ctx, image) {
+            // 图片在canvas绘制时的尺寸
+            let ratio
+            let needCompress = false
+            let maxWidth = ctx.canvas.width
+            let maxHeight = ctx.canvas.height
+            // 图片宽高跟 canvas 的宽高比较, 谁的尺寸比大 按谁的来
+            if (image.naturalWidth > maxWidth) {
+                needCompress = true
+                ratio = image.naturalWidth / maxWidth
+                maxHeight = (image.naturalHeight / ratio) > maxHeight ? maxHeight : (image.naturalHeight / ratio)
+            }
+            if (image.naturalHeight > maxHeight) {
+                needCompress = true
+                ratio = image.naturalHeight / maxHeight
+                maxWidth = image.naturalWidth / ratio
+            }
+            // 如果不需要压缩，就用图片自然尺寸就行
+            if (!needCompress) {
+                maxWidth = image.naturalWidth
+                maxHeight = image.naturalHeight
+            }
+            return { width: maxWidth, height: maxHeight }
+        }
+
+        // 阻止文本选中
+        document.onselectstart = function (e) {
+            e.preventDefault()
+        }
+    </script>
+</body>
+
+</html>
